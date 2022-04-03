@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { memo } from 'react';
+import { Route, Switch, Redirect } from 'react-router-dom';
 
-function App() {
+import RouteCommon from './pages/RouteCommon';
+import HomeContainer from './pages/home';
+import MenberContainer from './pages/menber';
+
+import { urls } from './services';
+
+const formRoutes = [
+  {
+    path: urls.home, component: HomeContainer,
+  },
+  {
+    path: urls.menber, component: MenberContainer
+  }
+]
+
+const AppContainer = () => {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+      <Switch>
+        {
+          formRoutes.map((config) => (
+            <Route key={config.path} path={config.path} exact={config.exact === true} render={(routeProps) => (
+              <RouteCommon {...routeProps} />
+            )} />
+          ))
+        }
+        <Redirect from="*" to={urls.home} />
+      </Switch>
+    </>
+  )
 }
 
-export default App;
+export default memo(AppContainer);
